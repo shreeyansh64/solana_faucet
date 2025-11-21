@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { ConnectionProvider, WalletProvider } from '@solana/wallet-adapter-react';
 import { UnsafeBurnerWalletAdapter } from '@solana/wallet-adapter-wallets';
 import {
@@ -9,9 +9,12 @@ import {
 import { clusterApiUrl } from '@solana/web3.js';
 import '@solana/wallet-adapter-react-ui/styles.css';
 import { AirDrop } from './airDrop';
+import { WalletAdapterNetwork } from '@solana/wallet-adapter-base';
 
 function App() {
-  
+
+  const netWork = WalletAdapterNetwork.Devnet;
+  const endPoint = useMemo(()=>clusterApiUrl(netWork),[netWork]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -20,8 +23,8 @@ function App() {
   }, []);
 
   return (
-    <ConnectionProvider endpoint={clusterApiUrl('devnet')}>
-      <WalletProvider wallets={[new UnsafeBurnerWalletAdapter()]} autoConnect>
+    <ConnectionProvider endpoint={endPoint}>
+      <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>
           <div style={{
             minHeight: '100vh',
